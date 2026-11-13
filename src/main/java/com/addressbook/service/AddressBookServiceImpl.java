@@ -1,7 +1,7 @@
 /*
  * Project Name: Address Book Application
- * Use Case: Section 2 - UC2
- * Description: Implements AddressBook service operations and handles business logic.
+ * Use Case: Section 2 - UC3
+ * Description: Implements CRUD operations using an in-memory ArrayList.
  * Author: Ashish Srivastava
  * Date: 13/11/2026
  */
@@ -9,6 +9,7 @@
 package com.addressbook.service;
 
 import com.addressbook.dto.AddressBookDTO;
+import com.addressbook.exception.ContactNotFoundException;
 import com.addressbook.mapper.AddressBookMapper;
 import com.addressbook.model.AddressBook;
 
@@ -25,64 +26,94 @@ public class AddressBookServiceImpl implements AddressBookService {
     private static final Logger logger =
             LoggerFactory.getLogger(AddressBookServiceImpl.class);
 
-    // Temporary ID counter; actual storage comes in UC3
+    // In-memory collection to store contacts
+    private final List<AddressBook> contactStore = new ArrayList<>();
+
+    // Generates a unique ID for every new contact
     private int nextContactId = 1;
 
-    // Return an empty list because storage is not implemented yet
+    // Retrieve all contacts
     @Override
     public List<AddressBookDTO> getAllContacts() {
 
-        logger.info("Service: Fetching all contacts");
+        logger.info("Fetching all contacts");
 
-        return new ArrayList<>();
+        // Convert every Model object into a DTO
+        return contactStore.stream()
+                .map(AddressBookMapper::toDTO)
+                .toList();
     }
 
-    // Return a sample contact to demonstrate service delegation
+    // Retrieve a contact using its ID
     @Override
     public AddressBookDTO getContactById(int targetContactId) {
 
-        logger.info("Service: Fetching contact with ID {}", id);
+        logger.info("Fetching contact with ID: {}", targetContactId);
 
-        AddressBook model = new AddressBook(
-                id,
-                "Sample",
-                "Contact",
-                "9876543210"
-        );
+        AddressBook contactToDelete = findContactById(targetContactId);
 
-        return AddressBookMapper.toDTO(model);
+        return AddressBookMapper.toDTO(contact);
     }
 
-    // Convert DTO to Model and return the response DTO
+    // Create and store a new contact
     @Override
     public AddressBookDTO createContact(AddressBookDTO contactDTO) {
 
-        logger.info("Service: Creating a contact");
+        logger.info("Creating a new contact");
 
-        AddressBook model =
+        // Convert DTO into Model with a generated ID
+        AddressBook contact =
                 AddressBookMapper.toModel(dto, nextContactId++);
 
-        return AddressBookMapper.toDTO(model);
+        // Store contact in the in-memory List
+        contactStore.add(newContact);
+
+        logger.info("Contact created with ID: {}", contact.getId());
+
+        return AddressBookMapper.toDTO(contact);
     }
 
-    // Convert the updated DTO into a Model and return it as DTO
+    // Update an existing contact
     @Override
     public AddressBookDTO updateContact(int targetContactId, AddressBookDTO contactDTO) {
 
-        logger.info("Service: Updating contact with ID {}", id);
+        logger.info("Updating contact with ID: {}", targetContactId);
 
-        AddressBook model =
-                AddressBookMapper.toModel(dto, id);
+        // Find the existing contact
+        AddressBook existingContact = findContactById(targetContactId);
 
-        return AddressBookMapper.toDTO(model);
+        // Update its fields
+        existingContact.setFirstName(contactDTO.getFirstName());
+        existingContact.setLastName(contactDTO.getLastName());
+        existingContact.setPhoneNumber(contactDTO.getPhoneNumber());
+
+        return AddressBookMapper.toDTO(existingContact);
     }
 
-    // Demonstrate delete operation
+    // Delete a contact using its ID
     @Override
     public String deleteContact(int targetContactId) {
 
-        logger.info("Service: Deleting contact with ID {}", id);
+        logger.info("Deleting contact with ID: {}", targetContactId);
 
-        return "DELETE request successful for ID: " + id;
+        // Find contact before deleting it
+        AddressBook contactToDelete = findContactById(targetContactId);
+
+        contactStore.remove(contactToDelete);
+
+        return "Contact deleted successfully with ID: " + targetContactId;
+    }
+
+    // Find a contact or throw an exception if it does not exist
+    private AddressBook findContactById(int targetId) {
+
+        return contactStore.stream()
+                .filter(contact -> contact.getId() == targetId)
+                .findFirst()
+                .orElseThrow(() ->
+                        new ContactNotFoundException(
+                                "Contact not found with ID: " + targetId
+                        )
+                );
     }
 }
