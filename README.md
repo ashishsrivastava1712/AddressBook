@@ -4,7 +4,7 @@ An enterprise-grade, modular backend REST API application developed using **Spri
 
 ---
 
-## 📌 Project Overview
+##  Project Overview
 
 In personal and organizational workflows, managing contact information across disparate systems often leads to data duplication, inconsistencies, and communication breakdowns. The **Address Book Application** provides a robust, centralized RESTful API that enables client applications to seamlessly create, retrieve, update, and delete contact records.
 
@@ -17,7 +17,7 @@ The application adheres strictly to the **Separation of Concerns (SoC)** princip
 
 ---
 
-## 🎯 Problem Statement & Motivation
+##  Problem Statement & Motivation
 
 Traditional contact management approaches often face key challenges:
 1. **Tight Coupling:** Direct coupling between database models and API payloads causes brittle APIs that break upon internal schema changes.
@@ -28,7 +28,7 @@ This Address Book application resolves these issues by implementing clean archit
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 * **Complete CRUD Operations:** Create, Read, Update, and Delete address book contacts.
 * **RESTful Endpoint Design:** Clean, standardized URI paths conforming to HTTP method semantics (`GET`, `POST`, `PUT`, `DELETE`).
@@ -40,7 +40,7 @@ This Address Book application resolves these issues by implementing clean archit
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 | Category | Technology / Library | Purpose |
 | :--- | :--- | :--- |
@@ -55,7 +55,7 @@ This Address Book application resolves these issues by implementing clean archit
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 The following diagram illustrates the layered execution flow from an incoming HTTP client request down to the in-memory storage:
 
@@ -110,7 +110,7 @@ sequenceDiagram
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```text
 AddressBook/
@@ -169,7 +169,7 @@ AddressBook/
 
 ---
 
-## 🔄 Iterative Use Cases (GitFlow Stages)
+## Iterative Use Cases (GitFlow Stages)
 
 The repository was built following a structured, use-case driven GitFlow methodology:
 
@@ -363,7 +363,7 @@ The project includes unit and integration tests covering positive paths, edge ca
 
 ---
 
-## 👤 Author
+##  Author
 
 **Ashish Srivastava**  
 * GitHub: [@ashishsrivastava1712](https://github.com/ashishsrivastava1712)  
